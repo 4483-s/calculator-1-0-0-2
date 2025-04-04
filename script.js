@@ -1,71 +1,60 @@
 const display = document.querySelector(".display >p");
 const btns = document.querySelectorAll("button");
-//DOM
 display.textContent = "0";
-let operation = "0";
+let op1 = "0";
+let op2 = "";
+let operator = "";
 btns.forEach((btn) => {
-  btn.addEventListener("click", function (e) {
-    if (e.target.textContent.match(/[.\d]/)) {
-      getDigit(e.target.textContent);
-    } else {
-      fn(e.target.textContent);
+  btn.addEventListener("click", () => {
+    if (btn.textContent.match(/\d/)) {
+      digit(btn.textContent);
+      return;
+    }
+    switch (btn.textContent) {
+      case "+":
+        operator = "+";
+        break;
+      case "-":
+        operator = "-";
+        break;
+      case "*":
+        operator = "*";
+        break;
+      case "/":
+        operator = "/";
+        break;
+      case "AC":
+        op1 = "0";
+        op2 = "";
+        operator = "";
+        break;
     }
   });
 });
-const re = new RegExp(/[-/*+=]/);
-function getDigit(content) {
-  if (operation === "0") {
-    if (content === ".") {
-      operation += content;
-    } else operation = content;
+function digit(value) {
+  if (op1 === "0") {
+    op1 = value;
+    return;
+  }
+  if (!operator) {
+    op1 += value;
+    display.textContent = op1;
   } else {
-    if (false && content === ".") {
-      return;
-    } else {
-      operation += content;
-    }
+    op2 += value;
   }
-  display.textContent = operation;
 }
-function fn(content) {
-  // console.log(content);
-  const operationSplited = operation.trim().split(" ");
-  opLength = operationSplited.length;
-  //AC reaction
-  if (content === "AC") {
-    operation = "0";
-    display.textContent = operation;
-  }
-  //
-  else if (content === "+/-") {
-    operation = operationSplited[0] * -1 + "";
-  } else if (content === "%") {
-    operation = operationSplited * 0.01 + "";
-  } else if (content.match(re)) {
-    if (operationSplited.filter((x) => x !== "").length === 2) {
-      operation = operation.replace(operation.at(-2), content);
-    }
-    //
-    else if (opLength === 3) {
-      if (operationSplited[1] === "-") {
-        operation = operationSplited[0] - operationSplited[2] + ` ${content} `;
-      } else if (operationSplited[1] === "+") {
-        operation =
-          +operationSplited[0] + +operationSplited[2] + ` ${content} `;
-      } else if (operationSplited[1] === "/") {
-        operation = operationSplited[0] / operationSplited[2] + ` ${content} `;
-      } else if (operationSplited[1] === "*") {
-        operation = operationSplited[0] * operationSplited[2] + ` ${content} `;
-      }
-    } else {
-      operation += ` ${content} `;
-    }
 
-    if (operation.includes("=")) {
-      operation = operation.slice(0, -3);
-    }
-  }
-  display.textContent = operation;
+//
 
-  console.log(operation);
+function calculate(a, o, b) {
+  switch (o) {
+    case "*":
+      return a * b;
+    case "/":
+      return a / b;
+    case "+":
+      return a + b;
+    case "-":
+      return a - b;
+  }
 }
