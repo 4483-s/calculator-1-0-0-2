@@ -51,7 +51,7 @@ btns.forEach((btn) => {
 });
 function digit(value) {
   console.log(value);
-  if (op1 === "0") {
+  if (op1 === "0" && !operator) {
     op1 = value === "." ? op1 + value : value;
     if (value === "." && op1.includes(".")) {
       return;
